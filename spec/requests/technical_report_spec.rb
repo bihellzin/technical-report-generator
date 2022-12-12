@@ -3,15 +3,22 @@ require 'rails_helper'
 RSpec.describe "Technical Reports", type: :request do
   describe "GET /api/v1/technical_reports" do
     it "returns http success" do
-      # this will perform a GET request to the /health/index route
       get "/api/v1/technical_reports"
 
-      # 'response' is a special object which contain HTTP response received after a request is sent
-      # response.body is the body of the HTTP response, which here contain a JSON string
-    #   expect(response.body).to eq('{"status":"online"}')
-
-      # we can also check the http status of the response
       expect(response.status).to eq(200)
+    end
+
+    it "returns a single technical report" do
+      @technical_report = TechnicalReport.new(
+        name: "Test User 1",
+        device:  "Test Device 1",
+        defect: "Test Defect 1",
+        description: "Test Description 1"
+      )
+      @technical_report.save
+
+      get "/api/v1/technical_reports/1"
+      expect(controller.headers["Content-Type"]).to eq('application/xlsx')
     end
   end
 
