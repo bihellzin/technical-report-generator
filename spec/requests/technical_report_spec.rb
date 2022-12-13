@@ -17,8 +17,12 @@ RSpec.describe "Technical Reports", type: :request do
       )
       @technical_report.save
 
+      expect(TechnicalReport.count).to eq(1)
+
       get "/api/v1/technical_reports/1"
-      expect(controller.headers["Content-Type"]).to eq('application/xlsx')
+
+      expect(response.headers["Content-Type"]).to eq('application/xlsx')
+      expect(response.headers["Content-Disposition"]).to eq("attachment; filename=\"technical_report_1.xlsx\"; filename*=UTF-8''technical_report_1.xlsx")
     end
   end
 
